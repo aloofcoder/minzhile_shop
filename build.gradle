@@ -1,0 +1,55 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath ('se.transmode.gradle:gradle-docker:1.2')
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+apply plugin: 'docker'
+
+group = 'net.le'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+war {
+    archiveName 'minzhile.war'
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+    compile('org.projectlombok:lombok:1.18.2')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+
+// 构建docker镜像
+task dockerBuilder(type: Docker, dependsOn:war) {
+    println('start build docker images')
+    dockerfile = file('Dockerfile')
+    doFirst {
+        copy {
+            from war
+            into 'build/docker'
+        }
+    }
+}
