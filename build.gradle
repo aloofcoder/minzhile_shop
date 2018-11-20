@@ -25,7 +25,6 @@ war {
     archiveName 'minzhile.war'
 }
 
-
 repositories {
     mavenCentral()
 }
