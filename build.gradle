@@ -25,6 +25,10 @@ war {
     archiveName 'minzhile.war'
 }
 
+jar {
+    baseName 'minzhile'
+}
+
 repositories {
     mavenCentral()
 }
@@ -44,6 +48,7 @@ dependencies {
 // 构建docker镜像
 task dockerBuilder(type: Docker, dependsOn:war) {
     println('start build docker images')
+    applicationName = jar.baseName
     dockerfile = file('Dockerfile')
     doFirst {
         copy {
