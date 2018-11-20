@@ -18,8 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 apply plugin: 'docker'
 
-group = 'net.le'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = 1.8
 
 war {
@@ -48,7 +47,7 @@ task dockerBuilder(type: Docker, dependsOn:war) {
     dockerfile = file('Dockerfile')
     doFirst {
         copy {
-            from 'build/libs'
+            from war
             into 'build/docker'
         }
     }
