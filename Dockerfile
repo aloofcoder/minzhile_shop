@@ -1,2 +1,2 @@
 FROM tomcat
-COPY build/libs/**.war /usr/local/tomcat/webapps/
+COPY build/docker/**.war /usr/local/tomcat/webapps/
