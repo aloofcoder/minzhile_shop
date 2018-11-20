@@ -22,7 +22,7 @@ version = '1.0.0'
 sourceCompatibility = 1.8
 
 war {
-    archiveName 'minzhile.war'
+    baseName 'minzhile'
 }
 
 repositories {
@@ -42,12 +42,13 @@ dependencies {
 
 
 // 构建docker镜像
-task dockerBuilder(type: Docker, dependsOn:war) {
+task dockerBuilder(type: Docker, dependsOn:build) {
     println('start build docker images')
+    applicationName = war.baseName
     dockerfile = file('Dockerfile')
     doFirst {
         copy {
-            from war
+            from 'build/libs'
             into 'build/docker'
         }
     }
