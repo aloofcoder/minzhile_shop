@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.le.minzhile.system.dao.MenuDao">
+
+
+    <select id="findAllMenu" resultType="map">
+        SELECT m.id id,m.menu_name menuName,m.menu_type menuType,m.menu_url menuUrl,m.parentid parentId,
+        m.valid valid,m.remark remark,m.create_time createTime,m.edit_time editTime,m.create_user createUser,
+        m.edit_user editUser,(
+        SELECT p.menu_name
+        FROM menu_info p
+        WHERE p.id = m.parentid) parentName
+        FROM menu_info m;
+    </select>
+
+
+    <resultMap id="menuResultMap" type="menu">
+        <id property="id" column="id"></id>
+        <id property="menuName" column="menu_name"></id>
+        <id property="menuType" column="menu_type"></id>
+        <id property="menuUrl" column="menu_url"></id>
+        <id property="parentId" column="parentid"></id>
+        <result property="valid" column="valid"></result>
+        <result property="remark" column="remark"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="editTime" column="edit_time"></result>
+        <result property="createUser" column="create_user"></result>
+        <result property="editUser" column="edit_user"></result>
+    </resultMap>
+</mapper>

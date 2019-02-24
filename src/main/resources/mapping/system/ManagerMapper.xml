@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.le.minzhile.system.dao.ManagerDao">
+
+    <!-- 分页获取管理员 -->
+    <select id="findAllManager" resultMap="managerResultMap">
+        SELECT * FROM manager_info
+        WHERE valid = 0
+        <include refid="condition"/>
+        limit #{startIndex}, #{pageSize};
+    </select>
+
+    <select id="getRowCount" resultType="int">
+        SELECT COUNT(*) FROM manager_info WHERE valid = 0
+        <include refid="condition"/>;
+    </select>
+
+    <!-- 查询条件匹配 -->
+    <sql id="condition">
+        <if test='managerNum != null and managerNum != ""'>
+            AND manager_num = #{managerNum}
+        </if>
+        <if test='managerName != null and managerName != ""'>
+            AND manager_name = #{managerName}
+        </if>
+        <if test='managerMobile != null and managerMobile != ""'>
+            AND manager_mobile = #{managerMobile}
+        </if>
+    </sql>
+
+
+    <!-- 保存管理员 -->
+    <insert id="saveManager" parameterType="manager">
+        INSERT INTO manager_info (
+          manager_num,manager_pwd,manager_name,manager_mobile,manager_email,
+          manager_avatar,salt,valid,remark,create_time,edit_time,create_user,
+          edit_user
+        ) VALUES (
+          #{managerNum},#{managerPwd},#{managerName},#{managerMobile},
+          #{managerEmail},#{managerAvatar},#{salt},0,
+          #{remark},NOW(),NOW(),#{createUser},#{editUser}
+        );
+    </insert>
+
+    <!-- 通过管理员表号查找管理员信息 -->
+    <select id="findManagerInfoByManagerNum" parameterType="string" resultMap="managerResultMap">
+        SELECT * FROM manager_info WHERE valid = 0 AND manager_num = #{managerNum};
+    </select>
+
+
+    <!-- 修改管理员信息 -->
+    <update id="editManager" parameterType="manager">
+        UPDATE manager_info
+        <set>
+            <if test="id != null and id > 0">id = #{id},</if>
+            <if test="managerNum != null and managerNum != ''">manager_num = #{managerNum},</if>
+            <if test="managerPwd != null and managerPwd != ''">manager_pwd = #{managerPwd},</if>
+            <if test="managerName != null and managerName != ''">manager_name = #{managerName},</if>
+            <if test="managerMobile != null and managerMobile != ''">manager_mobile = #{managerMobile},</if>
+            <if test="managerEmail != null and managerEmail != ''">manager_email = #{managerEmail},</if>
+            <if test="managerAvatar != null and managerAvatar != ''">manager_avatar = #{managerAvatar},</if>
+            <if test="salt != null and salt != ''">salt = #{salt},</if>
+            <if test="valid != null and valid >= 0">valid = #{valid},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="editUser != null and editUser != ''">edit_user = #{editUser},</if>
+            edit_time = NOW()
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 删除管理员 -->
+    <update id="removeManager" parameterType="int">
+      UPDATE manager_info SET valid = 1
+      where id = #{id}
+    </update>
+
+    <resultMap id="managerResultMap" type="manager">
+        <id property="id" column="id"></id>
+        <result property="managerNum" column="manager_num"></result>
+        <result property="managerPwd" column="manager_pwd"></result>
+        <result property="managerName" column="manager_name"></result>
+        <result property="managerMobile" column="manager_mobile"></result>
+        <result property="managerEmail" column="manager_email"></result>
+        <result property="managerAvatar" column="manager_avatar"></result>
+        <result property="salt" column="salt"></result>
+        <result property="valid" column="valid"></result>
+        <result property="remark" column="remark"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="editTime" column="edit_time"></result>
+        <result property="createUser" column="create_user"></result>
+        <result property="editUser" column="edit_user"></result>
+    </resultMap>
+</mapper>

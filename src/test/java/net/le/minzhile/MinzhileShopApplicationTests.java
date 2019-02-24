@@ -1,4 +1,4 @@
-package net.le.minzhile_shop;
+package net.le.minzhile;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
