@@ -31,7 +31,7 @@ public class ManagerServiceTest {
      */
     @Test
     public void testFindAllManager() {
-        Map<String, Object> map = managerService.findAllManager(1);
+        Map<String, Object> map = managerService.findAllManager(1, null, null, null);
         System.out.println(map);
         List<Manager> lists = (List<Manager>)map.get("list");
         Assert.assertTrue(lists.size() >= 0);
@@ -58,7 +58,7 @@ public class ManagerServiceTest {
      */
     @Test
     public void testEditManager() {
-        Map<String, Object> map = managerService.findAllManager(1);
+        Map<String, Object> map = managerService.findAllManager(1, null, null, null);
         System.out.println(map);
         List<Manager> lists = (List<Manager>)map.get("list");
         if (lists.size() <= 0) {
@@ -76,7 +76,7 @@ public class ManagerServiceTest {
      */
     @Test
     public void deleteManager() {
-        Map<String, Object> map = managerService.findAllManager(1);
+        Map<String, Object> map = managerService.findAllManager(1, null, null, null);
         System.out.println(map);
         List<Manager> lists = (List<Manager>)map.get("list");
         if (lists.size() <= 0) {
