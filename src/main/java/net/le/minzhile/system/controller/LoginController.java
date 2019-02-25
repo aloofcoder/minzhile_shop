@@ -51,9 +51,6 @@ public class LoginController {
         String token = (String)map.get("token");
         log.info("登录成功， 登录人：" + loginManager.getManagerName());
         response.setHeader("authorization", token);
-//        Cookie cookie = new Cookie("manager_num", loginManager.getManagerNum());
-//        cookie.setMaxAge(2 * 60 * 60);
-//        response.addCookie(cookie);
         return new JsonResult();
     }
 
