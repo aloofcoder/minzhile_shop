@@ -21,11 +21,8 @@ apply plugin: 'docker'
 version = '1.0.0'
 sourceCompatibility = 1.8
 
-war {
-    baseName 'minzhile'
-}
-
 bootWar {
+    baseName 'minzhile'
     archiveName 'minzhile.war'
 }
 
@@ -56,7 +53,7 @@ dependencies {
 // 构建docker镜像
 task dockerBuilder(type: Docker, dependsOn: build) {
     println('start build docker file')
-    applicationName = war.baseName
+    applicationName = bootWar.baseName
     dockerfile = file('Dockerfile')
     doFirst {
         copy {

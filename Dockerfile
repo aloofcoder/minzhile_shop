@@ -1,2 +1,2 @@
 FROM tomcat
-COPY **.war /usr/local/tomcat/webapps/minzhile.war
+COPY minzhile.war /usr/local/tomcat/webapps/minzhile.war
