@@ -39,6 +39,11 @@ public class Manager implements Serializable {
     private String managerName;
 
     /**
+     * 角色字符串
+     */
+    private String roleStr;
+
+    /**
      * 管理员电话
      */
     private String managerMobile;

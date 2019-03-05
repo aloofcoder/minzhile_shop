@@ -20,8 +20,6 @@ import java.util.Date;
 @ToString
 public class Menu implements Serializable {
 
-
-
     private Integer id;
 
     private String menuName;

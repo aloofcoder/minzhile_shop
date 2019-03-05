@@ -5,16 +5,19 @@
 <mapper namespace="net.le.minzhile.system.dao.MenuDao">
 
 
+    <!-- 分页查询菜单信息 -->
     <select id="findAllMenu" resultType="map">
-        SELECT m.id id,m.menu_name menuName,m.menu_type menuType,m.menu_url menuUrl,m.parentid parentId,
-        m.valid valid,m.remark remark,m.create_time createTime,m.edit_time editTime,m.create_user createUser,
-        m.edit_user editUser,(
-        SELECT p.menu_name
-        FROM menu_info p
-        WHERE p.id = m.parentid) parentName
-        FROM menu_info m;
+        SELECT m.id id,m.menu_name menuName,m.menu_icon menuIcon,
+        m.menu_type menuType,m.menu_url menuUrl,m.parentid parentId,
+        m.valid valid,m.remark remark,( SELECT p.menu_name
+        FROM menu_info p WHERE p.id = m.parentid) parentName FROM menu_info m
+		  WHERE m.valid = 0;
     </select>
 
+    <select id="getRowCount" resultType="int">
+        SELECT COUNT(*) FROM menu_info m
+        WHERE m.valid = 0;
+    </select>
 
     <resultMap id="menuResultMap" type="menu">
         <id property="id" column="id"></id>

@@ -1,6 +1,7 @@
 package net.le.minzhile.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import net.le.minzhile.system.dao.MenuDao;
 import org.junit.Test;
@@ -29,23 +30,65 @@ public class TreeUtilsTest {
 
     @Test
     public void parseTreeNode() {
-        List<Map<String, Object>> menuList = menuDao.findAllMenu();
-        List<Map<String, Object>> parentList = new ArrayList<>();
-        for (int i = 0; i < menuList.size(); i ++) {
-            // 给每一项菜单添加children 属性
-            menuList.get(i).put("children", new ArrayList<Map<String, Object>>());
-        }
+//        List<Map<String, Object>> menuList = menuDao.findAllMenu();
+//        JSONArray array= JSONArray.parseArray(JSON.toJSONString(menuList));
+//        System.out.println("menuList >>> " + array);
+//        JSONArray menuArray = TreeUtilsTest.parseTree(array);
+//        System.out.println("menuArray >>> " + menuArray);
     }
 
-    public void parseTree (List<Map<String, Object>> menuList) {
-        for (int i = 0; i < menuList.size(); i ++) {
-            String menuName = menuList.get(i).get("menuName").toString();
-            System.out.println("menuName >> " + menuName);
-            for (int j = 0; j < menuList.size(); j ++) {
-                System.out.println("menu >> " + menuList.get(j).get("menuName") + j);
+    public static JSONArray parseTree(JSONArray menuArray) {
+
+        int maxParentId = 0;
+        // 获取最后一项父级菜单id
+        for (int i = 0; i < menuArray.size(); i ++) {
+            JSONObject menuJson = menuArray.getJSONObject(i);
+            int parentId = menuJson.getInteger("parentId");
+            if (parentId > maxParentId) {
+                maxParentId = parentId;
             }
         }
-        System.out.println("menu >> " + menuList);
+        // 获取最后一项父级菜单
+        JSONArray otherArray = new JSONArray();
+        JSONArray parentArray = new JSONArray();
+        for (int i = 0; i < menuArray.size(); i ++) {
+            JSONObject menuJson = menuArray.getJSONObject(i);
+            int id = menuJson.getInteger("id");
+            if (maxParentId != id) {
+                otherArray.add(menuJson);
+            } else {
+                parentArray.add(menuJson);
+            }
+        }
+        if (parentArray.size() == 0) {
+            return new JSONArray();
+        }
+        if (parentArray.size() > 1) {
+            throw new RuntimeException("解析失败,祖节点只能有一个！");
+        }
+        JSONObject parentObject = parentArray.getJSONObject(0);
+        JSONArray children = new JSONArray();
+        JSONArray subArray = new JSONArray();
+        for (int i = 0; i < otherArray.size(); i ++) {
+            JSONObject menuJson = otherArray.getJSONObject(i);
+            int parentId = menuJson.getInteger("parentId");
+            if (parentId != maxParentId) {
+                subArray.add(menuJson);
+            } else {
+                children.add(menuJson);
+            }
+        }
+        if (menuArray.size() > 0) {
+            parentObject.put("children", children);
+            subArray.add(parentObject);
+        }
+        if (subArray.size() > 1) {
+            menuArray = parseTree(subArray);
+        } else {
+            menuArray = subArray;
+        }
+        return menuArray;
     }
+
 
 }

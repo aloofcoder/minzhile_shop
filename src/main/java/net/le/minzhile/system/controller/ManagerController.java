@@ -33,7 +33,12 @@ public class ManagerController {
      * @return
      */
     @ApiOperation(value = "分页获取管理员信息信息")
-    @ApiImplicitParam(name = "currentPage", required = true, dataType = "int", paramType = "query")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "managerNum", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "managerName", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "managerMobile", dataType = "String", paramType = "query")
+    })
     @GetMapping
     public JsonResult findAll(@RequestParam("currentPage") Integer currentPage,
                               @RequestParam("managerNum") String managerNum,

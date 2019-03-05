@@ -1,6 +1,7 @@
 package net.le.minzhile.system.service;
 
-import java.util.List;
+import com.alibaba.fastjson.JSONArray;
+
 
 /**
  * @Author hanle
@@ -9,5 +10,5 @@ import java.util.List;
  */
 public interface MenuService {
 
-    public List<Object> findAllMenu();
+    JSONArray findAllMenu();
 }

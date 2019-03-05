@@ -1,5 +1,7 @@
 package net.le.minzhile.system.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +12,15 @@ import java.util.Map;
  */
 public interface MenuDao {
 
+    /**
+     * 分页查询菜单信息
+     * @return
+     */
     List<Map<String, Object>> findAllMenu();
 
+    /**
+     * 获取所有菜单条数
+     * @return
+     */
+    int getRowCount();
 }

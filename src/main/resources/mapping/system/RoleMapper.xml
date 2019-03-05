@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.le.minzhile.system.dao.RoleDao">
+
+    <!-- 分页查询角色信息 -->
+    <select id="findAllRole" resultMap="roleResultMap">
+        SELECT * FROM role_info
+        WHERE valid = 0
+        <include refid="condition"/>
+        limit #{startIndex}, #{pageSize};
+    </select>
+
+    <!-- 获取角色总条数 -->
+    <select id="getRowCount" resultType="int">
+        SELECT COUNT(*) FROM role_info WHERE valid = 0
+        <include refid="condition"/>;
+    </select>
+
+
+    <sql id="condition">
+        <if test='roleName != null and roleName != ""'>
+            AND role_name = #{roleName}
+        </if>
+    </sql>
+
+    <!-- 通过角色姓名查询角色信息 -->
+    <select id="findRoleByRoleName" resultMap="roleResultMap">
+        SELECT * FROM role_info WHERE valid = 0 and role_name = #{roleName};
+    </select>
+
+    <!-- 通过角色id查询角色信息 -->
+    <select id="findRoleByRoleId" resultMap="roleResultMap">
+        SELECT * FROM role_info WHERE valid = 0 and role_id = #{roleId};
+    </select>
+
+    <!-- 添加角色信息 -->
+    <insert id="saveRole" parameterType="role">
+        INSERT INTO role_info (role_name, valid, remark,
+        create_time, edit_time, create_user, edit_user)
+        VALUES (#{roleName}, 0, #{remark}, NOW(), NOW(),
+         #{createUser}, #{editUser})
+    </insert>
+
+    <!-- 修改管理员信息 -->
+    <update id="editRole" parameterType="role">
+        UPDATE role_info
+        <set>
+            <if test='roleName != null and roleName != ""'> role_name = #{roleName},</if>
+            <if test='valid != null and valid != ""'> valid = #{valid},</if>
+            <if test='editUser != null and editUser != ""'> edit_user = #{editUser},</if>
+            edit_time = NOW()
+        </set>
+        WHERE id = #{id}
+
+    </update>
+
+    <!-- 删除角色信息 -->
+    <update id="removeRole" parameterType="int">
+        UPDATE role_info SET valid = 1 WHERE id = #{id}
+    </update>
+
+    <resultMap id="roleResultMap" type="role">
+        <id property="id" column="id"></id>
+        <id property="roleName" column="role_name"></id>
+        <result property="valid" column="valid"></result>
+        <result property="remark" column="remark"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="editTime" column="edit_time"></result>
+        <result property="createUser" column="create_user"></result>
+        <result property="editUser" column="edit_user"></result>
+    </resultMap>
+</mapper>
